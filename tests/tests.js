@@ -1,9 +1,9 @@
 test("Startup", function () {
-    var k = makeLazyJS();
-    ok(typeof k == "function", "makeLazyJS() returns a function");
+    var k = makeKoalaJS();
+    ok(typeof k == "function", "makeKoalaJS() returns a function");
 });
 test("Adding Objects", function () {
-    var k = makeLazyJS();
+    var k = makeKoalaJS();
     var testarr = [{
         red: 1
     }, {
@@ -33,7 +33,7 @@ test("Adding Objects", function () {
 
 });
 test(". Query", function () {
-    var k = makeLazyJS();
+    var k = makeKoalaJS();
     var testarr = [{
         red: 1,
         y: 2
@@ -79,7 +79,7 @@ test(". Query", function () {
 
 });
 test("! Query", function () {
-    var k = makeLazyJS();
+    var k = makeKoalaJS();
     var testarr = [{
         red: 1,
         y: 2
@@ -121,7 +121,7 @@ test("! Query", function () {
 });
 
 test("< Query", function () {
-    var k = makeLazyJS();
+    var k = makeKoalaJS();
     var testarr = [{
         red: 1,
         y: 2,
@@ -153,7 +153,7 @@ test("< Query", function () {
 });
 
 test("> Query", function () {
-    var k = makeLazyJS();
+    var k = makeKoalaJS();
     var lvar = 0;
     var testarr = [{
         red: function () {
@@ -189,7 +189,7 @@ test("> Query", function () {
 
 
 test("Attached Function", function () {
-    var k = makeLazyJS();
+    var k = makeKoalaJS();
     var testarr = [{
         red: function () {
             lvar += 27;

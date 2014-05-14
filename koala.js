@@ -1,16 +1,16 @@
-function makeLazyJS() {
+function makeKoalaJS() {
     var statics = {};
-	var lazy = function(e,t){
+	var koala = function(e,t){
 		if (typeof e == "object"){
-			e.kid = lazy.raw.length; 
-			lazy.raw.push(e);
+			e.kid = koala.raw.length; 
+			koala.raw.push(e);
 			return;
 		}
 		var args = [];
 		var temp;
 		/*for (var i = 0; i < arguments.length; i++){
 			if (typeof arguments[i] == "string"){
-				temp = lazy.splitquery(arguments[i]);
+				temp = koala.splitquery(arguments[i]);
 				for (var t in temp){
 					args.push(temp[t]);
 				}
@@ -21,13 +21,13 @@ function makeLazyJS() {
 			
 		}*/
 		
-		args = lazy.splitquery(e);
+		args = koala.splitquery(e);
 		
-		var workspace = lazy.switcher(args[0]);
+		var workspace = koala.switcher(args[0]);
 		
 		
 		for (var i = 1; i < args.length; i++){
-			workspace = lazy.switcher(args[i],workspace);
+			workspace = koala.switcher(args[i],workspace);
 		}
 		if (t){
 			var retval = [];
@@ -41,27 +41,27 @@ function makeLazyJS() {
 		}
 	}
 	var dirty = 0;
-	lazy.remove = function(o){
+	koala.remove = function(o){
 		if (typeof o == "object"){
 			o = o.kid;
 		}
-		lazy.raw[o].shouldbedeleted = true;
+		koala.raw[o].shouldbedeleted = true;
 		dirty++;
-		delete lazy.raw[o];
-		/*for (var i in lazy.cache){
-			delete lazy.cache[i].raw[o];
+		delete koala.raw[o];
+		/*for (var i in koala.cache){
+			delete koala.cache[i].raw[o];
 		}*/
-		/*lazy.raw.splice(o,1);
-		for (var i = o; i < lazy.raw.length; i++){
-			lazy.raw[i].kid = i;
+		/*koala.raw.splice(o,1);
+		for (var i = o; i < koala.raw.length; i++){
+			koala.raw[i].kid = i;
 		}*/
 	}
-	lazy.merge = function(x,y){
+	koala.merge = function(x,y){
 		for (var i in y){
 			x[i] = y[i];
 		}
 	}
-	lazy.splitquery = function(x){
+	koala.splitquery = function(x){
 		var delim = [".","<",">","!"];
 		var closest = [];
 		var index = 0;
@@ -93,20 +93,20 @@ function makeLazyJS() {
 		retval.push(x.substr(index-1));
 		return retval;
 	}
-	lazy.switcher = function(t,w){
+	koala.switcher = function(t,w){
 		if (typeof t == "string"){
-			return lazy.string(t,w);
+			return koala.string(t,w);
 		}
 	};
-	lazy.raw = [];
+	koala.raw = [];
 
-	//lazy.cache = {};
-	lazy.string = function(t,w){
+	//koala.cache = {};
+	koala.string = function(t,w){
 		var search;
 		var retval = [];
 		search = t.substr(1);
 		if (typeof w == "undefined"){
-			w = lazy.raw;
+			w = koala.raw;
 		}
 		switch (t.charAt(0)){
 			case ".":
@@ -194,19 +194,19 @@ function makeLazyJS() {
 				
 		}
 	}
-	lazy.clean = function () {
-	    if (dirty >= lazy.raw.length/2) {
+	koala.clean = function () {
+	    if (dirty >= koala.raw.length/2) {
 	        var newraw = [];
 	        var index = 0;
-	        for (var i in lazy.raw) {
-	            newraw.push(lazy.raw[i]);
-	            lazy.raw[i].kid = index;
+	        for (var i in koala.raw) {
+	            newraw.push(koala.raw[i]);
+	            koala.raw[i].kid = index;
 	            index++;
 
 	        }
-	        lazy.raw = newraw;
+	        koala.raw = newraw;
 	        dirty = 0;
 	    }
 	}
-	return lazy;
+	return koala;
 }
