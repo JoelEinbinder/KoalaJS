@@ -1,4 +1,6 @@
-LazyJS
+KoalaJS
 ======
 
-LazyJS let's you program badly, and makes it so things still work out ok.
+KoalaJS let's you program badly, and makes it so things still work out ok.
+
+
