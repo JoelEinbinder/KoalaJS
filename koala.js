@@ -1,7 +1,8 @@
 function makeKoalaJS() {
     var statics = {};
     var raw = [];
-	var koala = function(e,t){
+    
+    var koala = function(e,t){
 		if (typeof e == "object"){
 			e.kid = raw.length; 
 			raw.push(e);
@@ -21,7 +22,7 @@ function makeKoalaJS() {
 			}
 			
 		}*/
-		
+		//test edit
 		args = splitquery(e);
 		
 		var workspace = switcher(args[0]);
@@ -194,6 +195,7 @@ function makeKoalaJS() {
 				
 		}
 	}
+	
 	koala.clean = function () {
 	    if (dirty >= raw.length/2) {
 	        var newraw = [];
