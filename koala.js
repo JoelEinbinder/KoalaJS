@@ -22,7 +22,7 @@ function makeKoalaJS() {
 			}
 			
 		}*/
-		//test edit
+		
 		args = splitquery(e);
 		
 		var workspace = switcher(args[0]);
@@ -42,12 +42,12 @@ function makeKoalaJS() {
 			return workspace;
 		}
 	}
+    
 	var dirty = 0;
 	koala.remove = function(o){
 		if (typeof o == "object"){
 			o = o.kid;
 		}
-		raw[o].shouldbedeleted = true;
 		dirty++;
 		delete raw[o];
 		/*for (var i in koala.cache){
@@ -123,7 +123,7 @@ function makeKoalaJS() {
 					}
 					for (var i = 0; i < w.length; i++){
 					    if (w[i]) {
-					        if (w[i][search] == eq && !w[i].shouldbedeleted) {
+					        if (w[i][search] == eq) {
 					            retval.push(w[i]);
 					        }
 					    }
@@ -132,7 +132,7 @@ function makeKoalaJS() {
 				else{
 				    for (var i = 0; i < w.length; i++) {
 				        if (w[i]) {
-				            if (w[i][search] && !w[i].shouldbedeleted) {
+				            if (w[i][search]) {
 				                retval.push(w[i]);
 				            }
 				        }
@@ -154,7 +154,7 @@ function makeKoalaJS() {
 					}
 					for (var i = 0; i < w.length; i++) {
 					    if (w[i]) {
-					        if (w[i][search] != eq && !w[i].shouldbedeleted) {
+					        if (w[i][search] != eq) {
 					            retval.push(w[i]);
 					        }
 					    }
@@ -163,7 +163,7 @@ function makeKoalaJS() {
 				else{
 				    for (var i = 0; i < w.length; i++) {
 				        if (w[i]) {
-				            if (!w[i][search] && !w[i].shouldbedeleted) {
+				            if (!w[i][search]) {
 				                retval.push(w[i]);
 				            }
 				        }
@@ -174,7 +174,7 @@ function makeKoalaJS() {
 			case ">":
 			    for (var i = 0; i < w.length; i++) {
 			        if (w[i]) {
-			            if (w[i][search] && !w[i].shouldbedeleted) {
+			            if (w[i][search]) {
 			                retval.push(w[i][search]());
 			            }
 			        }
@@ -185,9 +185,7 @@ function makeKoalaJS() {
 			case "<":
 			    for (var i = 0; i < w.length; i++) {
 			        if (w[i]) {
-			            if (!w[i].shouldbedeleted) {
-			                retval.push(w[i][search]);
-			            }
+		                retval.push(w[i][search]);
 			        }
 				}
 				return retval;
