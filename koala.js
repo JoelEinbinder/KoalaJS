@@ -1,9 +1,10 @@
 function makeKoalaJS() {
     var statics = {};
+    var raw = [];
 	var koala = function(e,t){
 		if (typeof e == "object"){
-			e.kid = koala.raw.length; 
-			koala.raw.push(e);
+			e.kid = raw.length; 
+			raw.push(e);
 			return;
 		}
 		var args = [];
@@ -21,13 +22,13 @@ function makeKoalaJS() {
 			
 		}*/
 		
-		args = koala.splitquery(e);
+		args = splitquery(e);
 		
-		var workspace = koala.switcher(args[0]);
+		var workspace = switcher(args[0]);
 		
 		
 		for (var i = 1; i < args.length; i++){
-			workspace = koala.switcher(args[i],workspace);
+			workspace = switcher(args[i],workspace);
 		}
 		if (t){
 			var retval = [];
@@ -45,15 +46,15 @@ function makeKoalaJS() {
 		if (typeof o == "object"){
 			o = o.kid;
 		}
-		koala.raw[o].shouldbedeleted = true;
+		raw[o].shouldbedeleted = true;
 		dirty++;
-		delete koala.raw[o];
+		delete raw[o];
 		/*for (var i in koala.cache){
 			delete koala.cache[i].raw[o];
 		}*/
-		/*koala.raw.splice(o,1);
-		for (var i = o; i < koala.raw.length; i++){
-			koala.raw[i].kid = i;
+		/*raw.splice(o,1);
+		for (var i = o; i < raw.length; i++){
+			raw[i].kid = i;
 		}*/
 	}
 	koala.merge = function(x,y){
@@ -61,7 +62,7 @@ function makeKoalaJS() {
 			x[i] = y[i];
 		}
 	}
-	koala.splitquery = function(x){
+	function splitquery(x) {
 		var delim = [".","<",">","!"];
 		var closest = [];
 		var index = 0;
@@ -93,20 +94,19 @@ function makeKoalaJS() {
 		retval.push(x.substr(index-1));
 		return retval;
 	}
-	koala.switcher = function(t,w){
+	function switcher(t, w) {
 		if (typeof t == "string"){
-			return koala.string(t,w);
+			return string(t,w);
 		}
 	};
-	koala.raw = [];
 
 	//koala.cache = {};
-	koala.string = function(t,w){
+	function string(t, w) {
 		var search;
 		var retval = [];
 		search = t.substr(1);
 		if (typeof w == "undefined"){
-			w = koala.raw;
+			w = raw;
 		}
 		switch (t.charAt(0)){
 			case ".":
@@ -195,16 +195,16 @@ function makeKoalaJS() {
 		}
 	}
 	koala.clean = function () {
-	    if (dirty >= koala.raw.length/2) {
+	    if (dirty >= raw.length/2) {
 	        var newraw = [];
 	        var index = 0;
-	        for (var i in koala.raw) {
-	            newraw.push(koala.raw[i]);
-	            koala.raw[i].kid = index;
+	        for (var i in raw) {
+	            newraw.push(raw[i]);
+	            raw[i].kid = index;
 	            index++;
 
 	        }
-	        koala.raw = newraw;
+	        raw = newraw;
 	        dirty = 0;
 	    }
 	}
