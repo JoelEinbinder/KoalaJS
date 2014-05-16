@@ -1,7 +1,42 @@
 function makeKoalaJS() {
+    //shim indexOf
+    if (!Array.prototype.indexOf) {
+        Array.prototype.indexOf = function(searchElement, fromIndex) {
+            if (this === undefined || this === null) {
+                throw new TypeError('"this" is null or not defined');
+            }
+
+            var length = this.length >>> 0; // Hack to convert object.length to a UInt32
+
+            fromIndex = +fromIndex || 0;
+
+            if (Math.abs(fromIndex) === Infinity) {
+                fromIndex = 0;
+            }
+
+            if (fromIndex < 0) {
+                fromIndex += length;
+                if (fromIndex < 0) {
+                    fromIndex = 0;
+                }
+            }
+
+            for (; fromIndex < length; fromIndex++) {
+                if (this[fromIndex] === searchElement) {
+                    return fromIndex;
+                }
+            }
+
+            return -1;
+        };
+    }
+
     var statics = {};
     var raw = [];
-    
+    var wm;
+    if (WeakMap){
+        wm = new WeakMap();
+    }
     var koala = function(e,t){
 		if (typeof e == "object"){
 			e.kid = raw.length; 
@@ -50,13 +85,6 @@ function makeKoalaJS() {
 		}
 		dirty++;
 		delete raw[o];
-		/*for (var i in koala.cache){
-			delete koala.cache[i].raw[o];
-		}*/
-		/*raw.splice(o,1);
-		for (var i = o; i < raw.length; i++){
-			raw[i].kid = i;
-		}*/
 	}
 	koala.merge = function(x,y){
 		for (var i in y){
@@ -207,6 +235,9 @@ function makeKoalaJS() {
 	        raw = newraw;
 	        dirty = 0;
 	    }
+	}
+	function indexOfObject(o){
+		return raw.indexOf(o);
 	}
 	return koala;
 }
