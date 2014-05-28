@@ -34,7 +34,7 @@ function makeKoalaJS() {
     var statics = {};
     var raw = [];
     var wm;
-    if (WeakMap){
+    if (typeof WeakMap != "undefined"){
         wm = new WeakMap();
     }
     var koala = function(e,t){
