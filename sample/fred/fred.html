@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			KoalaJS - Fred the Box
+		</title>
+        <script type="text/javascript" src="../../koala.js"></script>
+	</head>
+	<body>
+		<canvas width=800 height=800 id="gamescreen" style="display:block;margin:auto;"></canvas>
+		<script>
+		    var ctx = document.getElementById("gamescreen").getContext('2d');
+		    ctx.translate(0.5, 0.5);
+		    var size = 800;
+		    var width = size;
+		    var height = size;
+		    var k = makeKoalaJS();
+		    setInterval(draw, 33);
+		    function Grass(e) {
+		        k.merge(this, e);
+		        k(this);
+		    }
+            
+		    Grass.prototype = {
+		        x: 0,
+		        y: 0,
+		        w: 6,
+                h: 6,
+		        draw: function () {
+		            ctx.fillStyle = "#0F0";
+		            ctx.strokeStyle = "#000";
+		            ctx.fillRect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
+		            ctx.strokeRect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
+		        },
+                grass: true
+		    };
+		    var GrassGrower = {
+		        step: function () {
+		            new Grass({
+		                x: Math.round(Math.random() * size),
+		                y: Math.round(Math.random() * size)
+		            });
+		        }
+		    };
+		    k(GrassGrower);
+		    function draw() {
+		        ctx.clearRect(0, 0, width, height);
+
+		        k('>step');
+		        k('>draw');
+
+		        ctx.strokeStyle = "#000";
+		        ctx.strokeRect(0, 0, width-1, height-1);
+		    }
+		</script>
+	</body>
+</html>
