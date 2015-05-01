@@ -39,7 +39,10 @@ function makeKoalaJS() {
     }
     var koala = function(e,t){
 		if (typeof e == "object"){
-			e.kid = raw.length; 
+			if (wm)
+                wm.set(e,raw.length);
+            else
+                e.kid = raw.length;
 			raw.push(e);
 			return;
 		}
@@ -80,17 +83,22 @@ function makeKoalaJS() {
     
 	var dirty = 0;
 	koala.remove = function(o){
+        var kid;
 		if (typeof o == "object"){
-			o = o.kid;
+			if (wm)
+                kid = wm.get(o);
+            else
+                kid = o.kid;
+
 		}
 		dirty++;
-		delete raw[o];
-	}
+		delete raw[kid];
+	};
 	koala.merge = function(x,y){
 		for (var i in y){
 			x[i] = y[i];
 		}
-	}
+	};
 	function splitquery(x) {
 		var delim = [".","<",">","!"];
 		var closest = [];
@@ -224,18 +232,18 @@ function makeKoalaJS() {
 	
 	koala.clean = function () {
 	    if (dirty >= raw.length/2) {
-	        var newraw = [];
-	        var index = 0;
+	        var newRaw = [];
 	        for (var i in raw) {
-	            newraw.push(raw[i]);
-	            raw[i].kid = index;
-	            index++;
-
+	            var index = newRaw.push(raw[i]) - 1;
+                if (wm)
+                    wm.set(raw[i],index)
+                else
+    	            raw[i].kid = index;
 	        }
-	        raw = newraw;
+	        raw = newRaw;
 	        dirty = 0;
 	    }
-	}
+	};
 	function indexOfObject(o){
 		return raw.indexOf(o);
 	}
