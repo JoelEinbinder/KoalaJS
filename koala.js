@@ -1,37 +1,4 @@
 function makeKoalaJS() {
-    //shim indexOf
-    if (!Array.prototype.indexOf) {
-        Array.prototype.indexOf = function(searchElement, fromIndex) {
-            if (this === undefined || this === null) {
-                throw new TypeError('"this" is null or not defined');
-            }
-
-            var length = this.length >>> 0; // Hack to convert object.length to a UInt32
-
-            fromIndex = +fromIndex || 0;
-
-            if (Math.abs(fromIndex) === Infinity) {
-                fromIndex = 0;
-            }
-
-            if (fromIndex < 0) {
-                fromIndex += length;
-                if (fromIndex < 0) {
-                    fromIndex = 0;
-                }
-            }
-
-            for (; fromIndex < length; fromIndex++) {
-                if (this[fromIndex] === searchElement) {
-                    return fromIndex;
-                }
-            }
-
-            return -1;
-        };
-    }
-
-    var statics = {};
     var raw = [];
     var wm;
     if (typeof WeakMap != "undefined"){
@@ -42,30 +9,15 @@ function makeKoalaJS() {
 			if (wm)
                 wm.set(e,raw.length);
             else
-                e.kid = raw.length;
+                e.koala_id = raw.length;
 			raw.push(e);
 			return;
 		}
-		var args = [];
-		var temp;
-		/*for (var i = 0; i < arguments.length; i++){
-			if (typeof arguments[i] == "string"){
-				temp = koala.splitquery(arguments[i]);
-				for (var t in temp){
-					args.push(temp[t]);
-				}
-			}
-			else{
-				args.push(arguments[i]);
-			}
-			
-		}*/
-		
-		args = splitquery(e);
-		
+		var args = splitquery(e);
+
 		var workspace = switcher(args[0]);
-		
-		
+
+
 		for (var i = 1; i < args.length; i++){
 			workspace = switcher(args[i],workspace);
 		}
@@ -80,19 +32,19 @@ function makeKoalaJS() {
 			return workspace;
 		}
 	}
-    
+
 	var dirty = 0;
 	koala.remove = function(o){
-        var kid;
+        var koala_id;
 		if (typeof o == "object"){
 			if (wm)
-                kid = wm.get(o);
+                koala_id = wm.get(o);
             else
-                kid = o.kid;
+                koala_id = o.koala_id;
 
 		}
 		dirty++;
-		delete raw[kid];
+		delete raw[koala_id];
 	};
 	koala.merge = function(x,y){
 		for (var i in y){
@@ -148,8 +100,8 @@ function makeKoalaJS() {
 		switch (t.charAt(0)){
 			case ".":
 				var eq = search.split("=");
-				
-				if (eq.length > 1){				
+
+				if (eq.length > 1){
 					search = eq[0];
 					if (JSON){
 						eq = JSON.parse(eq[1]);
@@ -176,11 +128,11 @@ function makeKoalaJS() {
 				}
 				return retval;
 				break;
-				
+
 			case "!":
 				var eq = search.split("=");
-				
-				if (eq.length > 1){				
+
+				if (eq.length > 1){
 					search = eq[0];
 					if (JSON){
 						eq = JSON.parse(eq[1]);
@@ -217,7 +169,7 @@ function makeKoalaJS() {
 				}
 				return retval;
 				break;
-				
+
 			case "<":
 			    for (var i = 0; i < w.length; i++) {
 			        if (w[i]) {
@@ -226,10 +178,10 @@ function makeKoalaJS() {
 				}
 				return retval;
 				break;
-				
+
 		}
 	}
-	
+
 	koala.clean = function () {
 	    if (dirty >= raw.length/2) {
 	        var newRaw = [];
@@ -238,14 +190,11 @@ function makeKoalaJS() {
                 if (wm)
                     wm.set(raw[i],index)
                 else
-    	            raw[i].kid = index;
+    	            raw[i].koala_id = index;
 	        }
 	        raw = newRaw;
 	        dirty = 0;
 	    }
 	};
-	function indexOfObject(o){
-		return raw.indexOf(o);
-	}
 	return koala;
 }
